@@ -1,4 +1,5 @@
 import { cartsManager } from '../dao/models/mongoose/CartsManager.js';
+import { cartService } from '../services/carts.service.js';
 
 const addCart =  async (req, res) => {
     try {
@@ -94,6 +95,13 @@ const updateAllProducts= async (req, res) => {
     }
 }
 
+const getPurchase= async(req, res)=>{
+    const {idCart} = req.params;
+    console.log(req.rawHeaders[1].split(' ')[1]);
+    console.log(req.cookies.token);
+    const response = await cartService.purchase(idCart,req.cookies.token);
+    res.json({ response});
+}
 
 
 export const cartController={
@@ -103,7 +111,8 @@ export const cartController={
     "deleteProduct":deleteProduct,
     "deleteAllProducts":deleteAllProducts,
     "updateProductToCart":updateProductToCart,
-    "updateAllProducts":updateAllProducts
+    "updateAllProducts":updateAllProducts,
+    "getPurchase":getPurchase
 }
 
 // export default router;

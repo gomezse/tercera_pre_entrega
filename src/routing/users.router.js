@@ -8,4 +8,6 @@ const router =new Router();
 router.get('/:idUser',jwtValidation,authMiddleware(["ADMIN"]),
     userController.getUser);
 
+router.post("/",userController.create);    
+
 export default router;

@@ -20,6 +20,7 @@ export const jwtValidation = (req, res, next) => {
   try {
  
     const token = req.cookies.token;
+    console.log(token);
     const userToken = jwt.verify(token, config.secretKeyJWT);
     req.user = userToken; 
     next();

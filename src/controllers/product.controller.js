@@ -38,7 +38,9 @@ const addProduct= async (req, res) => {
     }
 
     try {
+        
         const newProduct = await productsManager.createOne(req.body);
+        // console.log("new product",newProduct);
         if (newProduct.code === 11000) {
 
             res.status(400).json({ message: `Product with code duplicated: ${newProduct.keyValue.code}`, product: newProduct });

@@ -15,6 +15,11 @@ class UsersManager {
     const response = await usersModel.create(obj);
     return response;
   }
+
+  async deleteOne(id) {
+    const response = await usersModel.deleteOne(id);
+    return response;
+  }
 }
 
 export const usersManager = new UsersManager();

@@ -10,6 +10,7 @@ import cartsRouter from './routing/carts.router.js';
 import sessionsRouter from './routing/sessions.router.js';
 import viewsRouter from './routing/views.router.js';
 import usersRouter from './routing/users.router.js';
+import ticketsRouter from './routing/tickets.router.js';
 //managers
 import { messagesManager } from "./dao/models/mongoose/MessagesManager.js";
 import { productsManager } from "./dao/models/mongoose/ProductsManager.js";
@@ -57,6 +58,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions",sessionsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/tickets", ticketsRouter);
 app.use("/", viewsRouter);
 
 const httpServer= app.listen(config.port, () => {

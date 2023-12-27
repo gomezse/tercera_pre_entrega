@@ -7,6 +7,13 @@ const getUser = async (req, res) => {
   });
 };
 
+const create =async (req, res) => {
+  const user = req.body;
+  const createdUser = await userService.create(user);
+  res.json({ createdUser });
+}
+
 export const userController = {
   "getUser": getUser,
+  "create":create
 };
