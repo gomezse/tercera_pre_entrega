@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+import { cartsManager } from "../../dao/models/mongoose/CartsManager.js";
+const newCart = await cartsManager.createCart();
 const usersSchema = new mongoose.Schema({
   first_name: {
     type: String,
@@ -24,8 +25,8 @@ const usersSchema = new mongoose.Schema({
   },
   cart: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "cart",
-    default: null,
+    ref: "carts",
+    default: newCart._id,
   },
   isGitHub: {
     type: Boolean,

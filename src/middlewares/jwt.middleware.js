@@ -25,7 +25,7 @@ export const jwtValidation = (req, res, next) => {
     req.user = userToken; 
     next();
   } catch (error) {
-    res.json({ error: error.message });
+    res.json({ errorssss: error.message });
   }
 };
 

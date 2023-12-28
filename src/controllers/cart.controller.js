@@ -32,8 +32,8 @@ const addProductToCart= async (req, res) => {
 
     try {
         const newProduct = await cartsManager.addProductToCart(cid, pid);
-        res.status(200).json({ message: 'Product added to cart', product: newProduct });
-
+        // res.status(200).json({ message: 'Product added to cart', product: newProduct });
+        res.json("todp ok");
     } catch (error) {
         CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
@@ -99,9 +99,11 @@ const updateAllProducts= async (req, res) => {
 }
 
 const getPurchase= async(req, res)=>{
-    const {idCart} = req.params;
-    const response = await cartService.purchase(idCart,req.cookies.token);
-    res.json({ response});
+    const {cid} = req.body;
+   
+    const response = await cartService.purchase(cid,req.cookies.token);
+    
+    res.json({data: response});
 }
 
 

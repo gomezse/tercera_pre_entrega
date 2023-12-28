@@ -20,5 +20,6 @@ export default{
     "googleClientSecret":process.env.GOOGLE_CLIENT_SECRET,
     "secretKeyJWT":process.env.SECRET_KEY_JWT,
     "nodemailerUser":process.env.NODEMAILER_USER,
-    "nodemailerPassword":process.env.NODEMAILER_PASSWORD
+    "nodemailerPassword":process.env.NODEMAILER_PASSWORD,
+    "rolUser":process.env.ROLE_USER
 }

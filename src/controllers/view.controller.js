@@ -1,6 +1,9 @@
 import { productsManager } from "../dao/models/mongoose/ProductsManager.js"
 import { cartsManager } from "../dao/models/mongoose/CartsManager.js";
 import { usersManager } from "../dao/models/mongoose/UsersManager.js";
+import config from "../utils/config.js";
+import jwt from "jsonwebtoken";
+
 const chat =async (req, res) => {
     const products = await productsManager.findAll(req.query);
     res.render("chat",{products,style:'index'});
@@ -33,29 +36,31 @@ const login = (req, res) => {
 };
 
 const signup = (req, res) => {
-    if (req.session.user) {
+    if (req.cookies.token) {
         return res.redirect("/profile");
     }
     res.render("signup");
 }
 
 const profile = async (req, res) => {
-    if (!req.session.passport) {
+    
+    if (!req.cookies.token) {
+         
         return res.redirect("/login");
     }
-
-    const user = await  usersManager.findById(req.session.passport.user);        
+    const user = jwt.verify(req.cookies.token, config.secretKeyJWT);
+    // const user = await  usersManager.findById(req.session.passport.user);        
     const products = await productsManager.findAll(req.query);
-
+   
     if (!products.payload.length) {
         return res.status(200).json({ message: 'No products' });
     } 
-    
+  
     const { payload } = products;
     
     
     const productsObject = payload.map(product => product.toObject());
-    res.render("profile", { products: productsObject, user: req.user?req.user:user.toObject() });
+    res.render("profile", { products: productsObject, user: req.user?req.user:user });
 }
 
 const restaurar =  (req, res) => {

@@ -5,6 +5,8 @@ import passport from "passport";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import CustomError from '../errors/error.generator.js';
 import { ErrorsMessages,ErrorsName } from '../errors/error.enum.js';
+import { cartsManager } from "../dao/models/mongoose/CartsManager.js";
+import config from "../utils/config.js";
 
 
 const signup = async (req, res) => {
@@ -14,11 +16,14 @@ const signup = async (req, res) => {
   }
   try {
     const hashedPassword = await hashData(password);
+    const cart = await cartsManager.createCart();
     const createdUser = await usersManager.createOne({
       ...req.body,
       password: hashedPassword,
-      role: "PREMIUM",
+      role: config.rolUser,
+      cart:cart._id
     });
+    
     res.status(200).json({ message: "Usuario creado", user: createdUser });
   } catch (error) {
     CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);      
@@ -41,9 +46,9 @@ const login = async (req, res) => {
     }
   
     //jwt
-    const { first_name, last_name, role } = user;
-    const token = generateToken({ first_name, last_name, email, role });
-    
+    const { first_name, last_name, role ,cart} = user;
+    const token = generateToken({ first_name, last_name, email, role ,cart});
+   
     res
       .status(200)
       .cookie("token", token, { httpOnly: true })
@@ -66,9 +71,13 @@ const callbackGoogle= passport.authenticate("google", {
 });
 
 const signout = (req, res) => {
-  req.session.destroy(() => {
-    res.redirect("/login");
-  });
+
+  // req.session.destroy(() => {
+  //   res.redirect("/login");
+  // });
+//con cookies
+  res.clearCookie('token'); 
+  res.redirect("/login");
 }
 
 const current = (req, res, next) => {

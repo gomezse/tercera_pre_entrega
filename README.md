@@ -1,48 +1,26 @@
 Tercera Pre Entrega del PF  - Reestructura de nuestro servidor.
-Apuntado a probarse desde el lado de postman o thunderclient.
-
-Se adjuntó archivo BackendCoder.json con info de los nuevos endpoints y algunos de entregas anteriores para el test del poryecto.
-Importante loguearse.
-Los endpoints anteriores se encuentran en los archivos "thunder-collection ..." adjuntados previamente.
-
-Pasos para probar.
-Loguearse (endpoint de login http://localhost:8080/api/sessions/login) para obtener el token.
-usuario de prueba : test@test.com
-constraseña de prueba: 12345
-
-Luego pueden agregarse productos al carrito y realizarse la generacion del ticket.
-Caso de querer probar un nuevo carrito, se debe de utilizar otro usuario(en caso de generarlo, recordar que el rol debe ser "user" para poder agregar productos al carrito).
 
 
-Endpoints:(recordar adjuntar en el header el Authorization - value: Bearer ....token.....)
+Para testear desde el FRONT
+ 
+1) ejecutar http://localhost:8080/api/sessions/signout (limpiar cookies);
+2) acceder al signup : "http://localhost:8080/signup";
+3) registrarte de manera local
+4) una vez generado el user acceder a "http://localhost:8080/login"
+5) loguearse con el mail y password  del item 3
+6) esto arrojara el msj con el token generado.
+7) acceder al profile: "http://localhost:8080/profile";
 
-Add product :http://localhost:8080/api/products
-{"title":"Lapicera",
-"description":"Bic",
-"code":"lkj098",
-"price":150,
-"stock":7,
-"category":"utiles",
-"thumbnails":[]
-}
+En el profile esta el listado de productos. Cada producto tiene un boton de agregar al carrito.
+Al principio hay un link que permite ver el contenido del carrito con el user que se encuentra logueado.
+Debajo de este link se encuentra un boton para generar el ticket una vez que se hayan agregado productos al carrito.
 
-Create User:http://localhost:8080/api/users/
- "first_name":"test ",
-    "last_name": "surname_test",
-    "email":"test@test.com",
-    "password":"12345",
-    "role":"ADMIN"
+ACLARACIONES:
+Al loguearse manualmente en el archivo .env.production, se puede setear el rol que se desea tener con el usuario (para probar los middlewares de autorización);
+Cada vez que se agrega un producto al carrito se refresca la pagina automaticamente luego del "alert()"
+Cada vez que se crea un ticketse refresca la pagina automaticamente luego del "alert()"
 
-Login:http://localhost:8080/api/sessions/login
-{
-    "email":"test@test.com",
-    "password":"12345"
-}    
 
-Purchase :http://localhost:8080/api/carts/658b3e4ac24fcef8fddd7986/purchase
 
-Get Cart: http://localhost:8080/api/carts/658b3e4ac24fcef8fddd7986
 
-Add product to Cart: http://localhost:8080/api/carts/658b3e4ac24fcef8fddd7986/product/6538936ada4bdeef8f482bea (recordar que solo lo puede hacer el rol "USER")
 
-Get Ticket (para ver el ticket generado luego del purchase):http://localhost:8080/api/tickets/658b756b1b4c480b3a40374d

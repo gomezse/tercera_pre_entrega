@@ -16,7 +16,7 @@ export const hashData = async (data) => {
   };
   
   export const generateToken = (user) => {
-    const token = jwt.sign(user, config.secretKeyJWT, { expiresIn: 3000 });
+    const token = jwt.sign(user, config.secretKeyJWT, { expiresIn: 15000 });
     console.log("token generado: ", token);
     return token;
   };

@@ -17,6 +17,7 @@ class CartService{
     }
 
     async purchase(cid,token){
+        
         const cart = await cartsManager.getCartById(cid);
         const products= cart.products;
         let availableProducts= [];
@@ -47,9 +48,9 @@ class CartService{
     
             }
             await ticketsManager.createTicket(ticket);
-            return {availableProducts,totalAmount}
+            return {products:availableProducts,amount:totalAmount}
         }
-        return {unavailableProducts};
+        return {products:unavailableProducts,amount:"No definido"};
     }
 }
 export const cartService = new CartService();

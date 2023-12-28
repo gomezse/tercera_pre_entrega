@@ -10,7 +10,7 @@ router.delete("/:cid/products/:pid", cartController.deleteProduct);
 router.delete("/:cid",cartController.deleteAllProducts);
 router.put("/:cid/products/:pid",cartController.updateProductToCart);
 router.put("/:cid", cartController.updateAllProducts);
-router.get("/:idCart/purchase",cartController.getPurchase);
+router.post("/:idCart/purchase",cartController.getPurchase);
 
 
 export default router;
