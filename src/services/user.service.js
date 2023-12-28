@@ -19,7 +19,6 @@ class UserService {
   }
 
   async create(user){
-    // console.log("USER",user);
     const cart = await cartsManager.createCart();
     const hashPassword= await hashData(user.password);
  

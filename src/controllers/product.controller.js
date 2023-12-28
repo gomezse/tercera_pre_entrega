@@ -1,5 +1,7 @@
 import { productsManager } from '../dao/models/mongoose/ProductsManager.js';
-
+import { generateProduct } from '../utils/faker.js';
+import CustomError from '../errors/error.generator.js';
+import { ErrorsMessages,ErrorsName } from '../errors/error.enum.js';
 
 const getAll = async (req, res) => {
     try {
@@ -11,7 +13,7 @@ const getAll = async (req, res) => {
 
         res.status(200).json({ message: 'Products found', info });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
 }
 
@@ -20,12 +22,12 @@ const getById = async (req, res) => {
     try {
         const product = await productsManager.findById(pid);
         if (!product) {
-            return res.status(404).json({ message: `No product found with that id ${pid} ` });
+            CustomError.generateErrorMessage(ErrorsMessages.PRODUCT_NOT_FOUND,404,ErrorsName.PRODUCT_NOT_FOUND);        
         }
         res.status(200).json({ message: 'Product found', product });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
 }
 
@@ -39,16 +41,15 @@ const addProduct= async (req, res) => {
 
     try {
         
-        const newProduct = await productsManager.createOne(req.body);
-        // console.log("new product",newProduct);
+        const newProduct = await productsManager.createOne(req.body);        
         if (newProduct.code === 11000) {
 
-            res.status(400).json({ message: `Product with code duplicated: ${newProduct.keyValue.code}`, product: newProduct });
+            CustomError.generateErrorMessage(ErrorsMessages.PRODUCT_ALREADY_EXISTS,400,ErrorsName.PRODUCT_ALREADY_EXISTS);        
         }
         res.status(200).json({ message: 'Product created', product: newProduct });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
 }
 
@@ -59,7 +60,7 @@ const deleteProduct = async (req, res) => {
         const deletedProduct = await productsManager.deleteOne(pid)
         res.status(200).json({ message: 'Product deleted', deletedProduct });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
 };
 
@@ -75,19 +76,29 @@ const updateProduct =  async (req, res) => {
             res.status(200).json({ message: 'Product updated', product: updatedProduct });
         } else {
             // En caso de que no se encuentre el producto para actualizar
-            res.status(404).json({ message: 'Product not found' });
+            CustomError.generateErrorMessage(ErrorsMessages.PRODUCT_NOT_FOUND,404,ErrorsName.PRODUCT_NOT_FOUND);        
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);        
     }
 }
 
-
+const getMockingProducts =  async (req, res) => {
+        let arrayProducts = [];
+        
+        for(let i=0 ;i<100;i++){
+            const product=generateProduct();
+            arrayProducts.push(product);    
+        }
+        
+        res.status(200).json({ message: 'Mocked Products', arrayProducts });
+} 
 
 export const productController ={
     "getAll":getAll,
     "getById":getById,
     "addProduct":addProduct,
     "deleteProduct":deleteProduct,
-    "updateProduct":updateProduct
+    "updateProduct":updateProduct,
+    "getMockingProducts":getMockingProducts
 }

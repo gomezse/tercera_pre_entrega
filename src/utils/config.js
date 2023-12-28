@@ -18,5 +18,7 @@ export default{
     "gitClientSecret":process.env.GIT_CLIENT_SECRET,
     "googleClientId":process.env.GOOGLE_CLIENT_ID,
     "googleClientSecret":process.env.GOOGLE_CLIENT_SECRET,
-    "secretKeyJWT":process.env.SECRET_KEY_JWT
+    "secretKeyJWT":process.env.SECRET_KEY_JWT,
+    "nodemailerUser":process.env.NODEMAILER_USER,
+    "nodemailerPassword":process.env.NODEMAILER_PASSWORD
 }

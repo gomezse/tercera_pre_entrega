@@ -140,7 +140,6 @@ passport.use(
           isGoogle: true,
         };
         const createdUser = await usersManager.createOne(infoUser);
-        // console.log(createdUser);
         done(null, createdUser);
       } catch (error) {
         done(error);
@@ -150,7 +149,6 @@ passport.use(
 );
 
 const fromCookies = (req) => {   
-  console.log(req.cookies.token); 
   return req.cookies.token;
 };
 
@@ -159,8 +157,8 @@ passport.use(
   "jwt",
   new JWTStrategy(
     {      
-      // jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
+      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: config.secretKeyJWT,
     },
     async function (jwt_payload, done) {

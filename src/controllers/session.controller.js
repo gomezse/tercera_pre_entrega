@@ -3,6 +3,9 @@ import { hashData, compareData, generateToken } from "../utils/utils.js";
 import { usersManager } from "../dao/models/mongoose/UsersManager.js";
 import passport from "passport";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import CustomError from '../errors/error.generator.js';
+import { ErrorsMessages,ErrorsName } from '../errors/error.enum.js';
+
 
 const signup = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
@@ -18,7 +21,7 @@ const signup = async (req, res) => {
     });
     res.status(200).json({ message: "Usuario creado", user: createdUser });
   } catch (error) {
-    res.status(500).json({ error });
+    CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);      
   }
 }
 
@@ -34,7 +37,7 @@ const login = async (req, res) => {
     }    
     const isPasswordValid = await compareData(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Contraseña no válida" });
+      CustomError.generateErrorMessage(ErrorsMessages.INVALID_PASSWORD,401,ErrorsName.INVALID_PASSWORD);   
     }
   
     //jwt
@@ -46,7 +49,6 @@ const login = async (req, res) => {
       .cookie("token", token, { httpOnly: true })
       .json({ message: "Bienvenido a la pagina: ", token });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error });
   }
 }
@@ -72,11 +74,12 @@ const signout = (req, res) => {
 const current = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err,jwt_payload) => {
     if (err) {      
-      return res.status(500).json({ error: 'Error en autenticación' });
+      CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);  
+      
     }
 
     if (!jwt_payload) {      
-      return res.status(401).json({ message: 'Acceso no autorizado' });
+      CustomError.generateErrorMessage(ErrorsMessages.ErrorsName.INVALID_CREDENTIALS,401,ErrorsName.INVALID_CREDENTIALS);      
     }
 
     req.user = jwt_payload;    
@@ -86,7 +89,7 @@ const current = (req, res, next) => {
 
         res.json({ message: req.user });
       } catch (error) {
-        res.status(500).json({ error: 'Error en función async' });
+        CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);      
       }
     });
   })(req, res, next);
@@ -105,7 +108,7 @@ const restaurar =  async (req, res) => {
     await user.save();
     res.status(200).json({ message: "Password updated" });
   } catch (error) {
-    res.status(500).json({ error });
+    CustomError.generateErrorMessage(ErrorsMessages.ERROR_INTERNAL,500,ErrorsName.ERROR_INTERNAL);   
   }
 }
 

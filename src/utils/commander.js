@@ -5,6 +5,4 @@ program.option("-m, --mode <mode>","ambiente a ejecutar","dev")
 .option("-d, --debug","variable para debuggear",false)
 .parse();
 
-console.log('options:',program.opts());
-
 export default program;

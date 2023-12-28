@@ -26,7 +26,7 @@ const cartId=  async (req, res) => {
   };
 
 const login = (req, res) => {    
-    if (req.session.user) {
+    if (req && req.cookies.user) {
         return res.redirect("/profile");
     }
     res.render("login");
@@ -74,6 +74,10 @@ const errorLogin=(req, res) => {
     res.render("error_login",{message:message});
   }
 
+const message= (req, res) => {
+    res.render("messages");
+}  
+
 export const viewRouter = {
     "chat":chat,
     "products":products,
@@ -83,5 +87,6 @@ export const viewRouter = {
     "profile":profile,
     "restaurar":restaurar,
     "error":error,
-    "errorLogin":errorLogin
+    "errorLogin":errorLogin,
+    "message":message
 }
